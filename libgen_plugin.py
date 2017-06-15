@@ -40,14 +40,15 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
             extension = r['extension']
 
             #prep download via libgen
-            lpwview = 'http://libgen.io' + r['mirrors'][1]
-            br = browser()
-            with closing(br.open(lpwview, timeout=10)) as f:
+            lgpage = 'http://libgen.io' + r['mirrors'][1]
+            with closing(br.open(lgpage, timeout=10)) as f:
                 doc = f.read()
-            linkpos = doc.find('/get.php?md5=') -19
-            linkend = doc.find("'><h2>DOWNLOAD")
-            downloadurl = doc[linkpos:linkend]
-            s.downloads[extension.upper() + ' (via libgen)'] = downloadurl
+            linkend = doc.find('><h2>DOWNLOAD') - 1
+            doc = doc[linkend-100:linkend]
+            linkpos = doc.find('http')
+            libgendl = doc[linkpos:linkend]
+            libgendl = libgendl.replace('amp;', '')
+            s.downloads[extension + ' (via libgen)'] = libgendl
 
             #prep download via b-ok/booksc/bookzz
             bokpage = r['mirrors'][2]
