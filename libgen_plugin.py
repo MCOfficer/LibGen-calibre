@@ -23,16 +23,13 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
 
     def search(self, query, max_results=10, timeout=60):
 
-        lg=libgenapi.Libgenapi(["http://libgen.io","http://libgen.in","http://libgen.org","http://gen.lib.rus.ec","http://libgen.pw"])
+        lg=libgenapi.Libgenapi(["http://libgen.io","http://libgen.in","http://libgen.org","http://gen.lib.rus.ec"])
         results = lg.search(query)
 
         counter = 0
 
         for i in results:
-            if '}, {' in results: #if results is a tuple
-                r = results[counter]
-            else: #if results is a dictionary (only one hit)
-                r = results
+            r = results[counter]
 
             s = SearchResult()
             s.title = r['title']
@@ -41,22 +38,17 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
             s.drm = SearchResult.DRM_UNLOCKED
             extension = r['extension']
 
-            #prep download via libgen.pw
-            lpwview = r['mirrors'][0]
+            #prep download via libgen
+            lpwview = 'http://libgen.io' + r['mirrors'][1]
             br = browser()
             with closing(br.open(lpwview, timeout=10)) as f:
                 doc = f.read()
-            locationpos = doc.find('<td class="type3">location</td>') + 56
-            location = doc[locationpos:locationpos+26]
-            key = location[:5]
-            md5 = location[7:]
-            hidden0 = s.author + ' ' + s.title
-            hidden0 = urllib2.quote(hidden0.replace(' ', '+'))
-            hidden0 = hidden0.replace('%2B', '+')
-            downloadurl = 'https://libgen.pw/noleech1.php?hidden=' + key + '%2F' + md5 + '&hidden0=' + hidden0 + '.' + extension
+            linkpos = doc.find('/get.php?md5=') -19
+            linkend = doc.find("'><h2>DOWNLOAD")
+            downloadurl = doc[linkpos:linkend]
+            s.downloads[extension.upper() + ' (via libgen)'] = downloadurl
 
-            s.downloads[extension.upper()] = downloadurl
+
             s.formats = extension
-
             yield s
             counter = counter + 1
