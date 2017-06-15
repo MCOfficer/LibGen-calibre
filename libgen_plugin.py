@@ -54,6 +54,7 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
                 linkpos = doc.find('/covers')
                 linkend = doc.find('.jpg') + 4
                 cover = doc[linkpos:linkend]
+                cover = 'http://gen.lib.rus.ec' + cover
                 s.cover_url = cover
 
                 #prep download via libgen
@@ -65,7 +66,6 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
                 linkpos = doc.find('http')
                 libgendl = doc[linkpos:linkend]
                 libgendl = libgendl.replace('amp;', '')
-                print libgendl
                 s.downloads[extension + ' (via libgen)'] = libgendl
 
                 #prep download via b-ok/booksc/bookzz
@@ -77,7 +77,6 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
                 linkend = doc.find(' title=') - 1
                 linkpos = doc.find('http')
                 bokdl = doc[linkpos:linkend]
-                print bokdl
                 s.downloads[extension + ' (via b-ok)'] = bokdl
 
                 #prep download via bookfi
@@ -89,7 +88,6 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
                 linkend = doc.find(' title=') - 1
                 linkpos = doc.find('http')
                 bookfidl = doc[linkpos:linkend]
-                print bookfidl
                 s.downloads[extension + ' (via bookfi)'] = bookfidl
 
                 s.formats = extension
