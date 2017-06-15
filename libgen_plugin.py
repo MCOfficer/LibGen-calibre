@@ -27,6 +27,7 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
         results = lg.search(query)
 
         counter = 0
+        br = browser()
 
         for i in results:
             r = results[counter]
@@ -48,6 +49,27 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
             downloadurl = doc[linkpos:linkend]
             s.downloads[extension.upper() + ' (via libgen)'] = downloadurl
 
+            #prep download via b-ok/booksc/bookzz
+            bokpage = r['mirrors'][2]
+            with closing(br.open(bokpage, timeout=10)) as f:
+                doc = f.read()
+            pos = doc.find('/dl/')
+            doc = doc[pos-30:pos+30]
+            linkend = doc.find(' title=') - 1
+            linkpos = doc.find('http')
+            bokdl = doc[linkpos:linkend]
+            s.downloads[extension + ' (via b-ok)'] = bokdl
+
+            #prep download via bookfi
+            bfpage = r['mirrors'][3]
+            with closing(br.open(bfpage, timeout=10)) as f:
+                doc = f.read()
+            pos = doc.find('/dl/')
+            doc = doc[pos-30:pos+30]
+            linkend = doc.find(' title=') - 1
+            linkpos = doc.find('http')
+            bookfidl = doc[linkpos:linkend]
+            s.downloads[extension + ' (via bookfi)'] = bookfidl
 
             s.formats = extension
             yield s
