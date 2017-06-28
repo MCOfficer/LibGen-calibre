@@ -23,7 +23,7 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
 
     def search(self, query, max_results=10, timeout=60):
 
-        lg=libgenapi.Libgenapi(["http://libgen.io","http://gen.lib.rus.ec","http://libgen.in","http://libgen.org"])
+        lg=libgenapi.Libgenapi(["http://libgen.io","http://gen.lib.rus.ec","http://93.174.95.27/","http://libgen.in","http://libgen.org"])
         try:
             results = lg.search(query)
             abort = False
@@ -66,7 +66,8 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
                 linkpos = doc.find('http')
                 libgendl = doc[linkpos:linkend]
                 libgendl = libgendl.replace('amp;', '')
-                s.downloads[extension + ' (via libgen)'] = libgendl
+                libgenformat = 'libgen: .' + extension
+                s.downloads[libgenformat] = libgendl
 
                 #prep download via b-ok/booksc/bookzz
                 bokpage = r['mirrors'][2]
@@ -77,7 +78,8 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
                 linkend = doc.find(' title=') - 1
                 linkpos = doc.find('http')
                 bokdl = doc[linkpos:linkend]
-                s.downloads[extension + ' (via b-ok)'] = bokdl
+                bokformat = 'b-ok: .' + extension
+                s.downloads[bokformat] = bokdl
 
                 #prep download via bookfi
                 bfpage = r['mirrors'][3]
@@ -88,8 +90,10 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
                 linkend = doc.find(' title=') - 1
                 linkpos = doc.find('http')
                 bookfidl = doc[linkpos:linkend]
-                s.downloads[extension + ' (via bookfi)'] = bookfidl
+                #s.downloads('bookfi mirror:')
+                bookfiformat = 'bookfi: .' + extension
+                s.downloads[bookfiformat] = bookfidl
 
-                s.formats = extension
+                s.formats = libgenformat + ', ' + bokformat + ', ' + bookfiformat + ','
                 yield s
                 counter = counter + 1
