@@ -8,6 +8,6 @@ class B_OK_Store(StoreBase):
     name = 'Library Genesis'
     description = 'Access LibGen directly from calibre.'
     author = 'MCOfficer'
-    version = (1, 0, 0)
+    version = (1, 2, 0)
     drm_free_only = True
     actual_plugin = 'calibre_plugins.store_libgen.libgen_plugin:LibGen_Store'
