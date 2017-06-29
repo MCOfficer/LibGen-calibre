@@ -91,7 +91,7 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
                 #prep download via bookfi
                 bookfidl = 'http://dl.lux.bookfi.net/genesis/' + location + '/_as/' + filename + '.pdf'
                 bookfiformat = 'bookfi: .' + extension
-                s.downloads[bookfiformat] = bookfidl
+#                s.downloads[bookfiformat] = bookfidl
 
                 s.formats = libgenformat + ', ' + bokformat + ', ' + bookfiformat + ','
                 yield s
