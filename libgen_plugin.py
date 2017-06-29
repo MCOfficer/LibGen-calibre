@@ -69,28 +69,27 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
                 libgenformat = 'libgen: .' + extension
                 s.downloads[libgenformat] = libgendl
 
-                #prep download via b-ok/booksc/bookzz
-                bokpage = r['mirrors'][2]
-                with closing(br.open(bokpage, timeout=10)) as f:
+                #get download location from libgen.pw
+                lgpw = r['mirrors'][0].replace('view', 'download')
+                with closing(br.open(lgpw, timeout=10)) as f:
                     doc = f.read()
-                pos = doc.find('/dl/')
-                doc = doc[pos-30:pos+30]
-                linkend = doc.find(' title=') - 1
-                linkpos = doc.find('http')
-                bokdl = doc[linkpos:linkend]
+                pos = doc.find('location') + 16
+                end = doc.find('status') - 27
+                location = doc[pos:end]
+
+                #prep filename
+                filename = r['author'] + ' - ' + r['title']
+                filename = filename.replace(' ', '_')
+                filename = filename.encode('utf8')
+                filename = urllib2.quote(filename)
+
+                #prep download via b-ok (/bookzz/boosc/bookza)
+                bokdl = 'http://dlx.b-ok.org/genesis/' + location + '/_as/' + filename + '.pdf'
                 bokformat = 'b-ok: .' + extension
                 s.downloads[bokformat] = bokdl
 
                 #prep download via bookfi
-                bfpage = r['mirrors'][3]
-                with closing(br.open(bfpage, timeout=10)) as f:
-                    doc = f.read()
-                pos = doc.find('/dl/')
-                doc = doc[pos-30:pos+30]
-                linkend = doc.find(' title=') - 1
-                linkpos = doc.find('http')
-                bookfidl = doc[linkpos:linkend]
-                #s.downloads('bookfi mirror:')
+                bookfidl = 'http://dl.lux.bookfi.net/genesis/' + location + '/_as/' + filename + '.pdf'
                 bookfiformat = 'bookfi: .' + extension
                 s.downloads[bookfiformat] = bookfidl
 
