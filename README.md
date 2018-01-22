@@ -8,6 +8,7 @@ This Plug-in currently uses [mudew's fork of pylibgen](https://github.com/mudew/
 #### Please read:
 While switching to pylibgen, the ability to download from libgen mirrors (such as b-ok or libgen.pw) has been removed.
 Should this functionality be re-added? Please vote below.
+
 [![](https://api.gh-polls.com/poll/01C4E0C1VJQ62EH1WYJDSCFTPM/Yes)](https://api.gh-polls.com/poll/01C4E0C1VJQ62EH1WYJDSCFTPM/Yes/vote)
 [![](https://api.gh-polls.com/poll/01C4E0C1VJQ62EH1WYJDSCFTPM/No)](https://api.gh-polls.com/poll/01C4E0C1VJQ62EH1WYJDSCFTPM/No/vote)
 
