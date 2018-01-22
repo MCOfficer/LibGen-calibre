@@ -5,6 +5,8 @@ __docformat__ = 'restructuredtext en'
 
 from pylibgen import Library
 
+from contextlib import closing
+
 from PyQt5.Qt import QUrl
 
 from calibre import browser
@@ -16,12 +18,25 @@ from calibre.gui2.store.web_store_dialog import WebStoreDialog
 
 
 lg = Library()
+br = browser()
 
 
 class LibGen_Store(BasicStoreConfig, StorePlugin):
 
     def open(self, parent=None, detail_item=None, external=False):
         open_url(QUrl('http://gen.lib.rus.ec'))
+
+    def get_cover_url(self, md5):
+        try:
+            coverpage = 'http://libgen.io/book/index.php?md5=' + md5
+            coverpage = coverpage.replace('ads.', 'book/index.')
+            with closing(br.open(coverpage, timeout=10)) as f:
+                doc = f.read()
+            cover = doc[doc.find('/covers'):doc.find('.jpg') + 4]
+            return 'http://libgen.io' + cover
+        except Exception as e:
+            print("Failed to find cover url for book with md5 " + md5)
+            return ""
 
     def search(self, query, max_results=10, timeout=60):
         try:
@@ -33,7 +48,6 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
             return
 
         counter = 0
-        br = browser()
         for i in results:
             r = results[counter]
             s = SearchResult()
@@ -42,7 +56,7 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
             s.price = '$0.00'
             s.drm = SearchResult.DRM_UNLOCKED
             s.formats = r['extension']
-            downloadurl = lg.get_download_url(r['md5'])
-            s.downloads[r['extension']] = downloadurl
+            s.downloads[r['extension']] = lg.get_download_url(r['md5'])
+            s.cover_url = self.get_cover_url(r['md5'])
             yield s
             counter = counter + 1
