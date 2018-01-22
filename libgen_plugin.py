@@ -44,12 +44,11 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
             print('Reached LibGen Mirrors.')
         except Exception as e:
             print(e)
-            print('LibGenAPI crashed. In most cases this is caused by unreachable LibGen Mirrors, try again in a few minutes.')
+            print('pylibgen crashed. In most cases this is caused by unreachable LibGen Mirrors, try again in a few minutes.')
             return
 
-        counter = 0
-        for i in results:
-            r = results[counter]
+        for i in range(results):
+            r = results[i]
             s = SearchResult()
             s.title = r['title']
             s.author = r['author']
@@ -59,4 +58,3 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
             s.downloads[r['extension']] = lg.get_download_url(r['md5'])
             s.cover_url = self.get_cover_url(r['md5'])
             yield s
-            counter = counter + 1
