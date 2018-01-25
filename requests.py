@@ -1,5 +1,6 @@
 """
-Copyright 2017 Kenneth Reitz
+Copyright 2018 Mudew
+Derived from the work of Kenneth Reitz (https://github.com/requests/requests)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
