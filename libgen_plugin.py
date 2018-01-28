@@ -23,6 +23,9 @@ br = browser()
 
 class LibGen_Store(BasicStoreConfig, StorePlugin):
 
+
+    RES_THRESH = 5
+
     def open(self, parent=None, detail_item=None, external=False):
         open_url(QUrl('http://gen.lib.rus.ec'))
 
@@ -47,6 +50,8 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
             print('pylibgen crashed. In most cases this is caused by unreachable LibGen Mirrors, try again in a few minutes.')
             return
 
+        self.num_results = len(results)
+
         for r in results:
             s = SearchResult()
             s.title = r['title']
@@ -54,6 +59,13 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
             s.price = '$0.00'
             s.drm = SearchResult.DRM_UNLOCKED
             s.formats = r['extension']
-            s.downloads[r['extension']] = lg.get_download_url(r['md5'])
-            s.cover_url = self.get_cover_url(r['md5'])
+            s.detail_item = r['md5']
             yield s
+
+    def get_details(self, search_result, timeout=60):
+        if self.num_results > self.RES_THRESH:
+            return False
+        s = search_result
+        s.cover_url = self.get_cover_url(s.detail_item)
+        s.downloads[s.formats] = lg.get_download_url(s.detail_item)
+        return True
