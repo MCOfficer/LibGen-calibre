@@ -25,21 +25,26 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
 
 
     RES_THRESH = 5
+    url = 'http://gen.lib.rus.ec'
 
     def open(self, parent=None, detail_item=None, external=False):
-        open_url(QUrl('http://gen.lib.rus.ec'))
+        open_url(QUrl(self.url))
 
     def get_cover_url(self, md5):
         try:
-            coverpage = 'http://libgen.io/book/index.php?md5=' + md5
-            coverpage = coverpage.replace('ads.', 'book/index.')
+            coverpage = self.get_cover_page(md5)
             with closing(br.open(coverpage, timeout=10)) as f:
                 doc = f.read()
             cover = doc[doc.find('/covers'):doc.find('.jpg') + 4]
-            return 'http://libgen.io' + cover
+            return self.url + cover
         except Exception as e:
             print("Failed to find cover url for book with md5 " + md5)
             return ""
+
+    def get_cover_page(self, md5):
+        coverpage = "%s/book/index.php?md5=%s" % (self.url, md5)
+        return coverpage.replace('ads.', 'book/index.')
+
 
     def search(self, query, max_results=10, timeout=60):
         try:
