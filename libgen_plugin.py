@@ -47,8 +47,7 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
             print('pylibgen crashed. In most cases this is caused by unreachable LibGen Mirrors, try again in a few minutes.')
             return
 
-        for i in range(results):
-            r = results[i]
+        for r in results:
             s = SearchResult()
             s.title = r['title']
             s.author = r['author']
