@@ -28,7 +28,18 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
     url = 'http://gen.lib.rus.ec'
 
     def open(self, parent=None, detail_item=None, external=False):
-        open_url(QUrl(self.url))
+
+        detail_url = None
+        if detail_item:
+            detail_url = self.get_cover_page(detail_item)
+
+        if external or self.config.get('open_external', False):
+            open_url(QUrl(detail_url if detail_url else self.url))
+        else:
+            d = WebStoreDialog(self.gui, self.url, parent, detail_url)
+            d.setWindowTitle(self.name)
+            d.set_tags(self.config.get('tags', ''))
+            d.exec_()
 
     def get_cover_url(self, md5):
         try:
