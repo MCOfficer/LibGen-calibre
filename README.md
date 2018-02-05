@@ -5,11 +5,5 @@ Note that you cannot add the source code archive itself to calibre; either use o
 
 This Plug-in currently uses [mudew's fork of pylibgen](https://github.com/mudew/pylibgen) and [the requests module](https://github.com/requests/requests).
 
-### Please read:
-While switching to pylibgen, the ability to download from libgen mirrors (such as b-ok or libgen.pw) has been removed.
-Should this functionality be re-added? Please vote below.
-
-[![](https://api.gh-polls.com/poll/01C4E0C1VJQ62EH1WYJDSCFTPM/Yes)](https://api.gh-polls.com/poll/01C4E0C1VJQ62EH1WYJDSCFTPM/Yes/vote)
-[![](https://api.gh-polls.com/poll/01C4E0C1VJQ62EH1WYJDSCFTPM/No)](https://api.gh-polls.com/poll/01C4E0C1VJQ62EH1WYJDSCFTPM/No/vote)
-
-
+### Looking for a maintainer!
+I programmed this plug-in as a one-shot project. Now i very rarely find time to improve or even maintain it, so it's currently driven by contributors. If anyone wants to take over (preferably a contributor i already know to put in good work), feel free to contact me.
