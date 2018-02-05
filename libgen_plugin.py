@@ -59,7 +59,7 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
 
     def search(self, query, max_results=10, timeout=60):
         try:
-            results = lg.lookup(lg.search(query))
+            results = lg.lookup(lg.search(query, 'title') + lg.search(query, 'author'))
             print('Reached LibGen Mirrors.')
         except Exception as e:
             print(e)
