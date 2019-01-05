@@ -156,5 +156,10 @@ class Library(object):
         if urlonly:
             return url
         r = requests.get(url)
+
+        # ugly patch for the decoder to properly detect the response as json
+        if r.content.startswith('id['):
+            r.content = r.content[2:]
+
         r.raise_for_status()
         return r
