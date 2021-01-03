@@ -25,7 +25,7 @@ class LibGen_Store(BasicStoreConfig, StorePlugin):
 
 
     RES_THRESH = 5
-    url = 'http://gen.lib.rus.ec'
+    url = 'http://libgen.io'
 
     def open(self, parent=None, detail_item=None, external=False):
 
